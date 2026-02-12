@@ -1,0 +1,298 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Create Account — Vibe</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+
+:root{
+  --green:#1db954;
+  --green-light:#1ed760;
+  --black:#000000;
+  --dark:#121212;
+  --card:#181818;
+  --text:#ffffff;
+  --muted:#b3b3b3;
+  --border:rgba(255,255,255,0.1);
+  --input-bg:#2a2a2a;
+  --error:#f15e6c;
+  --error-bg:rgba(241,94,108,0.1);
+}
+
+html,body{min-height:100vh;background:var(--black);color:var(--text);font-family:'DM Sans',sans-serif;}
+
+/* ── background ── */
+.bg{
+  position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(29,185,84,0.18) 0%, transparent 60%),
+    linear-gradient(180deg,#0d0d0d 0%,#000 70%);
+}
+
+/* ── nav ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:10;
+  padding:1.4rem 2.5rem;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{display:flex;align-items:center;gap:9px;text-decoration:none;}
+.logo-icon{
+  width:32px;height:32px;background:var(--green);border-radius:50%;
+  display:grid;place-items:center;
+}
+.logo-icon svg{width:18px;height:18px;fill:#000;}
+.logo-name{font-weight:700;font-size:1.3rem;color:#fff;letter-spacing:-0.02em;}
+.nav-right{font-size:0.88rem;color:var(--muted);}
+.nav-right a{
+  color:#fff;font-weight:700;text-decoration:none;
+  padding:0.6rem 1.8rem;border-radius:500px;
+  border:1.5px solid rgba(255,255,255,0.5);
+  margin-left:1rem;
+  transition:border-color 0.2s,background 0.2s;
+}
+.nav-right a:hover{border-color:#fff;background:rgba(255,255,255,0.05);}
+
+/* ── page ── */
+.page{
+  position:relative;z-index:1;
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  padding:7rem 1.5rem 3rem;
+}
+
+/* ── card ── */
+.card{
+  width:100%;max-width:460px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:2.8rem 2.5rem;
+  animation:slideUp 0.5s ease forwards;
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── card header ── */
+.card-logo{display:flex;justify-content:center;margin-bottom:2rem;}
+.card-logo-icon{
+  width:50px;height:50px;background:var(--green);border-radius:50%;
+  display:grid;place-items:center;
+  box-shadow:0 0 30px rgba(29,185,84,0.35);
+}
+.card-logo-icon svg{width:28px;height:28px;fill:#000;}
+.card-title{
+  font-weight:700;font-size:1.75rem;
+  letter-spacing:-0.02em;text-align:center;
+  margin-bottom:0.4rem;
+}
+.card-subtitle{
+  text-align:center;font-size:0.88rem;
+  color:var(--muted);margin-bottom:2rem;
+}
+
+/* ── alert ── */
+.alert{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:0.85rem 1rem;border-radius:8px;
+  font-size:0.875rem;font-weight:500;
+  margin-bottom:1.5rem;line-height:1.5;
+  background:var(--error-bg);color:var(--error);
+  border:1px solid rgba(241,94,108,0.25);
+}
+.alert-icon{font-size:1rem;flex-shrink:0;margin-top:1px;}
+
+/* ── form ── */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+@media(max-width:480px){.form-row{grid-template-columns:1fr;}}
+
+.form-group{margin-bottom:1.1rem;}
+label{
+  display:block;font-size:0.78rem;font-weight:700;
+  letter-spacing:0.05em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:0.45rem;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"]{
+  width:100%;padding:0.82rem 1rem;
+  background:var(--input-bg);
+  border:1.5px solid rgba(255,255,255,0.12);
+  border-radius:6px;
+  color:#fff;font-family:'DM Sans',sans-serif;font-size:0.93rem;
+  transition:border-color 0.2s,background 0.2s;
+  outline:none;
+}
+input::placeholder{color:rgba(255,255,255,0.22);}
+input:focus{border-color:var(--green);background:#333;}
+input.error-field{border-color:var(--error);}
+
+/* ── requirements ── */
+.requirements{
+  background:rgba(255,255,255,0.03);
+  border:1px dashed rgba(255,255,255,0.1);
+  border-radius:8px;
+  padding:0.9rem 1rem;
+  margin-bottom:1.25rem;
+}
+.req-title{
+  font-size:0.72rem;font-weight:700;
+  letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--green);margin-bottom:0.6rem;
+}
+.req-list{list-style:none;display:flex;flex-direction:column;gap:0.3rem;}
+.req-list li{
+  font-size:0.8rem;color:rgba(255,255,255,0.35);
+  display:flex;align-items:center;gap:7px;
+}
+.req-list li::before{
+  content:'';
+  width:5px;height:5px;border-radius:50%;
+  background:rgba(29,185,84,0.5);flex-shrink:0;
+}
+
+/* ── submit ── */
+.btn-submit{
+  width:100%;padding:0.9rem;
+  background:var(--green);color:#000;
+  border:none;border-radius:500px;
+  font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:700;
+  cursor:pointer;margin-top:0.25rem;
+  transition:background 0.15s,transform 0.15s,box-shadow 0.2s;
+}
+.btn-submit:hover{
+  background:var(--green-light);
+  transform:scale(1.02);
+  box-shadow:0 6px 24px rgba(29,185,84,0.4);
+}
+.btn-submit:active{transform:scale(0.99);}
+
+/* ── bottom link ── */
+.bottom-link{
+  text-align:center;margin-top:1.5rem;
+  font-size:0.875rem;color:var(--muted);
+}
+.bottom-link a{
+  color:#fff;font-weight:700;text-decoration:none;
+  border-bottom:1px solid transparent;
+  transition:color 0.2s,border-color 0.2s;
+}
+.bottom-link a:hover{color:var(--green);border-color:var(--green);}
+
+@media(max-width:480px){
+  nav{padding:1rem 1.25rem;}
+  .card{padding:2rem 1.25rem;}
+  .nav-right span{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+
+<!-- nav -->
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.65 14.65c-.2.2-.51.27-.78.15-2.14-1.31-4.83-1.6-8-.88-.31.07-.62-.12-.69-.43-.07-.31.12-.62.43-.69 3.47-.8 6.45-.45 8.84 1.02.27.16.34.51.2.83zm1.24-2.77c-.25.25-.64.33-.97.19-2.45-1.5-6.18-1.94-9.08-1.06-.37.11-.76-.1-.87-.47s.1-.76.47-.87c3.31-.99 7.42-.51 10.23 1.24.32.2.42.62.22.97zm.11-2.88C15.12 9.46 10.42 9.3 7.75 10.09c-.44.13-.91-.12-1.04-.56-.13-.44.12-.91.56-1.04 3.07-.93 8.17-.75 11.39 1.23.4.24.52.75.28 1.15-.24.4-.76.53-1.14.29z"/></svg>
+    </div>
+    <span class="logo-name">Vibe</span>
+  </a>
+  <div class="nav-right">
+    <span>Already have an account?</span>
+    <a href="/login">Log in</a>
+  </div>
+</nav>
+
+<!-- page -->
+<div class="page">
+  <div class="card">
+
+    <!-- logo -->
+    <div class="card-logo">
+      <div class="card-logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.65 14.65c-.2.2-.51.27-.78.15-2.14-1.31-4.83-1.6-8-.88-.31.07-.62-.12-.69-.43-.07-.31.12-.62.43-.69 3.47-.8 6.45-.45 8.84 1.02.27.16.34.51.2.83zm1.24-2.77c-.25.25-.64.33-.97.19-2.45-1.5-6.18-1.94-9.08-1.06-.37.11-.76-.1-.87-.47s.1-.76.47-.87c3.31-.99 7.42-.51 10.23 1.24.32.2.42.62.22.97zm.11-2.88C15.12 9.46 10.42 9.3 7.75 10.09c-.44.13-.91-.12-1.04-.56-.13-.44.12-.91.56-1.04 3.07-.93 8.17-.75 11.39 1.23.4.24.52.75.28 1.15-.24.4-.76.53-1.14.29z"/></svg>
+      </div>
+    </div>
+
+    <h1 class="card-title">Sign up for free</h1>
+    <p class="card-subtitle">Join us today. It only takes a minute.</p>
+
+    <!-- error -->
+    {% if error %}
+    <div class="alert">
+      <span class="alert-icon">⚠</span>
+      <span>{{ error }}</span>
+    </div>
+    {% endif %}
+
+    <!-- form -->
+    <form method="POST" action="/register" novalidate>
+
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input
+          type="text" id="username" name="username"
+          placeholder="Choose a username"
+          value="{{ username or '' }}"
+          autocomplete="username" required autofocus
+          class="{{ 'error-field' if error else '' }}"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input
+          type="email" id="email" name="email"
+          placeholder="you@example.com"
+          value="{{ email or '' }}"
+          autocomplete="email" required
+          class="{{ 'error-field' if error else '' }}"
+        />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password" id="password" name="password"
+            placeholder="Create a password"
+            autocomplete="new-password" required
+            class="{{ 'error-field' if error else '' }}"
+          />
+        </div>
+        <div class="form-group">
+          <label for="confirm_password">Confirm</label>
+          <input
+            type="password" id="confirm_password" name="confirm_password"
+            placeholder="Repeat password"
+            autocomplete="new-password" required
+            class="{{ 'error-field' if error else '' }}"
+          />
+        </div>
+      </div>
+
+      <div class="requirements">
+        <p class="req-title">Requirements</p>
+        <ul class="req-list">
+          <li>Username: 3–20 characters (letters, numbers, underscores)</li>
+          <li>Valid email address format</li>
+          <li>Password: at least 6 characters</li>
+          <li>Both passwords must match</li>
+        </ul>
+      </div>
+
+      <button type="submit" class="btn-submit">Create Account</button>
+    </form>
+
+    <div class="bottom-link">
+      Already have an account? <a href="/login">Log in here</a>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
