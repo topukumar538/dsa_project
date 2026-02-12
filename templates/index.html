@@ -1,1 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vibe — Music for Everyone</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Circular+Std:wght@400;700;900&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --green: #1db954;
+      --green-light: #1ed760;
+      --black: #000000;
+      --dark: #121212;
+      --card: #181818;
+      --text: #ffffff;
+      --muted: #b3b3b3;
+      --border: rgba(255, 255, 255, 0.1);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 3rem;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9) 0%, transparent 100%);
+      backdrop-filter: blur(0px);
+      transition: background 0.3s, backdrop-filter 0.3s;
+    }
+
+    nav.scrolled {
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 34px;
+      height: 34px;
+      background: var(--green);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+    }
+
+    .logo-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: #000;
+    }
+
+    .logo-name {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .nav-link {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.5rem 0.75rem;
+      border-radius: 4px;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover {
+      color: #fff;
+    }
+
+    .nav-btn {
+      padding: 0.65rem 2rem;
+      border-radius: 500px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.15s, background 0.15s, box-shadow 0.15s;
+    }
+
+    .nav-btn:hover {
+      transform: scale(1.04);
+    }
+
+    .nav-btn-outline {
+      background: transparent;
+      color: #fff;
+      border: 1.5px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .nav-btn-outline:hover {
+      border-color: #fff;
+    }
+
+    .nav-btn-solid {
+      background: var(--green);
+      color: #000;
+    }
+
+    .nav-btn-solid:hover {
+      background: var(--green-light);
+      box-shadow: 0 0 20px rgba(29, 185, 84, 0.4);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* gradient bg layers */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 120% 70% at 50% -10%, rgba(29, 185, 84, 0.25) 0%, transparent 60%),
+        radial-gradient(ellipse 80% 50% at 80% 100%, rgba(29, 185, 84, 0.1) 0%, transparent 50%),
+        linear-gradient(180deg, #0d0d0d 0%, #000 60%);
+    }
+
+    /* floating album art cards */
+    .float-cards {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .fcard {
+      position: absolute;
+      border-radius: 8px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+      overflow: hidden;
+      opacity: 0;
+      animation: cardFloat var(--dur, 8s) var(--delay, 0s) ease-in-out infinite alternate, fadeInCard 1s var(--delay, 0s) forwards;
+    }
+
+    .fcard-inner {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+    }
+
+    @keyframes cardFloat {
+      from {
+        transform: translateY(0px) rotate(var(--rot, -5deg));
+      }
+
+      to {
+        transform: translateY(-20px) rotate(var(--rot2, 5deg));
+      }
+    }
+
+    @keyframes fadeInCard {
+      to {
+        opacity: var(--target-opacity, 0.7);
+      }
+    }
+
+    .fcard:nth-child(1) {
+      width: 130px;
+      height: 130px;
+      top: 15%;
+      left: 5%;
+      --dur: 9s;
+      --delay: 0.3s;
+      --rot: -8deg;
+      --rot2: -4deg;
+      --target-opacity: 0.6;
+      background: linear-gradient(135deg, #1db954, #0a7a30);
+    }
+
+    .fcard:nth-child(2) {
+      width: 100px;
+      height: 100px;
+      top: 60%;
+      left: 2%;
+      --dur: 11s;
+      --delay: 0.8s;
+      --rot: 5deg;
+      --rot2: 10deg;
+      --target-opacity: 0.5;
+      background: linear-gradient(135deg, #7c3aed, #4c1d95);
+    }
+
+    .fcard:nth-child(3) {
+      width: 150px;
+      height: 150px;
+      top: 10%;
+      right: 6%;
+      --dur: 10s;
+      --delay: 0.5s;
+      --rot: 6deg;
+      --rot2: 2deg;
+      --target-opacity: 0.65;
+      background: linear-gradient(135deg, #e91e8c, #9b1368);
+    }
+
+    .fcard:nth-child(4) {
+      width: 90px;
+      height: 90px;
+      top: 70%;
+      right: 3%;
+      --dur: 8s;
+      --delay: 1s;
+      --rot: -4deg;
+      --rot2: -9deg;
+      --target-opacity: 0.5;
+      background: linear-gradient(135deg, #ff6b2b, #c24f00);
+    }
+
+    .fcard:nth-child(5) {
+      width: 110px;
+      height: 110px;
+      top: 35%;
+      left: 8%;
+      --dur: 13s;
+      --delay: 0.2s;
+      --rot: 3deg;
+      --rot2: 8deg;
+      --target-opacity: 0.4;
+      background: linear-gradient(135deg, #00bcd4, #006f80);
+    }
+
+    .fcard:nth-child(6) {
+      width: 120px;
+      height: 120px;
+      top: 45%;
+      right: 7%;
+      --dur: 12s;
+      --delay: 1.2s;
+      --rot: -6deg;
+      --rot2: -2deg;
+      --target-opacity: 0.45;
+      background: linear-gradient(135deg, #ffd700, #b8860b);
+    }
+
+    /* note icons inside cards */
+    .fcard-inner::after {
+      content: '♪';
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 2.5rem;
+    }
+
+    /* ── hero content ── */
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 500px;
+      background: rgba(29, 185, 84, 0.15);
+      border: 1px solid rgba(29, 185, 84, 0.3);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.2s forwards;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.5);
+        opacity: 0.5;
+      }
+    }
+
+    .hero-title {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.35s forwards;
+    }
+
+    .hero-title .accent {
+      color: var(--green);
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      font-weight: 400;
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto 3rem;
+      line-height: 1.7;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.5s forwards;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.65s forwards;
+    }
+
+    .btn-hero {
+      padding: 1rem 3rem;
+      border-radius: 500px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: transform 0.15s cubic-bezier(.34, 1.56, .64, 1), box-shadow 0.2s, background 0.2s;
+    }
+
+    .btn-hero:hover {
+      transform: scale(1.05);
+    }
+
+    .btn-signup {
+      background: var(--green);
+      color: #000;
+    }
+
+    .btn-signup:hover {
+      background: var(--green-light);
+      box-shadow: 0 8px 30px rgba(29, 185, 84, 0.45);
+    }
+
+    .btn-login {
+      background: transparent;
+      color: #fff;
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .btn-login:hover {
+      border-color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* ── divider text ── */
+    .hero-divider {
+      margin-top: 4rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
+    }
+
+    .div-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .div-text {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.25);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* ── FEATURES ROW ── */
+    .features {
+      padding: 5rem 3rem 6rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    @media(max-width:700px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feat-card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 2rem;
+      border: 1px solid var(--border);
+      transition: background 0.2s, transform 0.25s, box-shadow 0.25s;
+      opacity: 0;
+      animation: fadeUp 0.7s calc(var(--i, 0)*0.1s + 1s) forwards;
+    }
+
+    .feat-card:hover {
+      background: #222;
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .feat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      background: rgba(29, 185, 84, 0.1);
+      border: 1px solid rgba(29, 185, 84, 0.2);
+      display: grid;
+      place-items: center;
+      font-size: 1.4rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .feat-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+
+    .feat-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── BOTTOM CTA ── */
+    .bottom-cta {
+      margin: 0 3rem 5rem;
+      background: linear-gradient(135deg, #1a1a1a, #0d0d0d);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 4rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bottom-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 80% at 50% -20%, rgba(29, 185, 84, 0.15), transparent 60%);
+      pointer-events: none;
+    }
+
+    .cta-title {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    .cta-sub {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .cta-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .no-style {
+      text-decoration: none;
+      /* removes underline */
+      color: inherit;
+      /* keeps the same color as parent */
+    }
+
+    .no-style:visited,
+    .no-style:hover,
+    .no-style:active {
+      text-decoration: none;
+      /* no underline on hover/click */
+      color: inherit;
+      /* no color change */
+    }
+
+    .foot-brand {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--muted);
+    }
+
+    .foot-brand span {
+      color: var(--green);
+    }
+
+    .foot-note {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(28px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media(max-width:600px) {
+      nav {
+        padding: 1rem 1.5rem;
+      }
+
+      .hero-actions,
+      .cta-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn-hero {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+      }
+
+      .features {
+        padding: 3rem 1.5rem;
+      }
+
+      footer {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="/" class="nav-logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.65 14.65c-.2.2-.51.27-.78.15-2.14-1.31-4.83-1.6-8-.88-.31.07-.62-.12-.69-.43-.07-.31.12-.62.43-.69 3.47-.8 6.45-.45 8.84 1.02.27.16.34.51.2.83zm1.24-2.77c-.25.25-.64.33-.97.19-2.45-1.5-6.18-1.94-9.08-1.06-.37.11-.76-.1-.87-.47s.1-.76.47-.87c3.31-.99 7.42-.51 10.23 1.24.32.2.42.62.22.97zm.11-2.88C15.12 9.46 10.42 9.3 7.75 10.09c-.44.13-.91-.12-1.04-.56-.13-.44.12-.91.56-1.04 3.07-.93 8.17-.75 11.39 1.23.4.24.52.75.28 1.15-.24.4-.76.53-1.14.29z" />
+        </svg>
+      </div>
+      <span class="logo-name">Vibe</span>
+    </a>
+    <div class="nav-actions">
+      <a href="/register" class="nav-btn nav-btn-solid">Sign up free</a>
+      <a href="/login" class="nav-btn nav-btn-outline">Log in</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+
+    <!-- floating cards -->
+    <div class="float-cards">
+      <div class="fcard">
+        <div class="fcard-inner"></div>
+      </div>
+      <div class="fcard">
+        <div class="fcard-inner"></div>
+      </div>
+      <div class="fcard">
+        <div class="fcard-inner"></div>
+      </div>
+      <div class="fcard">
+        <div class="fcard-inner"></div>
+      </div>
+      <div class="fcard">
+        <div class="fcard-inner"></div>
+      </div>
+      <div class="fcard">
+        <div class="fcard-inner"></div>
+      </div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Free to use · No credit card needed
+      </div>
+
+      <h1 class="hero-title">
+        Millions of songs.<br>
+        <span class="accent">Free on Vibe.</span>
+      </h1>
+
+      <p class="hero-sub">
+        Listen to the music you love, discover new artists, and share your vibe with the world — all in one place.
+      </p>
+
+      <div class="hero-actions">
+        <a href="/register" class="btn-hero btn-signup">
+          Sign up free
+        </a>
+        <a href="/login" class="btn-hero btn-login">
+          Log in
+        </a>
+      </div>
+
+      <div class="hero-divider">
+        <div class="div-line"></div>
+        <span class="div-text">or continue with</span>
+        <div class="div-line"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="features-grid">
+      <div class="feat-card" style="--i:0">
+        <div class="feat-icon">🎵</div>
+        <div class="feat-title">100M+ Tracks</div>
+        <div class="feat-desc">Access an ever-growing library of songs from every genre, era, and corner of the world.
+        </div>
+      </div>
+      <div class="feat-card" style="--i:1">
+        <div class="feat-icon">📻</div>
+        <div class="feat-title">Curated Playlists</div>
+        <div class="feat-desc">Handpicked playlists for every mood, moment, and activity — made just for you.</div>
+      </div>
+      <div class="feat-card" style="--i:2">
+        <div class="feat-icon">🎙️</div>
+        <div class="feat-title">Podcasts & More</div>
+        <div class="feat-desc">Dive into thousands of podcasts, interviews, and exclusive audio content.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOTTOM CTA -->
+  <div class="bottom-cta">
+    <h2 class="cta-title">Start listening today.</h2>
+    <p class="cta-sub">Join millions of music lovers. It's free.</p>
+    <div class="cta-actions">
+      <a href="/register" class="btn-hero btn-signup">Create a free account</a>
+      <a href="/login" class="btn-hero btn-login">I already have an account</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <a href="/loginadmin" class="no-style">
+      <span class="foot-brand">Admin <span>Vibe</span></span>
+    </a>
+    <span class="foot-note">Data for everyone</span>
+  </footer>
+
+  <script>
+    // navbar scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 20);
+    });
+  </script>
+</body>
+
+</html>
