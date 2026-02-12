@@ -1,0 +1,318 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Welcome — Vibe</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+
+:root{
+  --green:#1db954;
+  --green-light:#1ed760;
+  --black:#000000;
+  --dark:#121212;
+  --card:#181818;
+  --card2:#282828;
+  --text:#ffffff;
+  --muted:#b3b3b3;
+  --border:rgba(255,255,255,0.1);
+  --input-bg:#2a2a2a;
+}
+
+html,body{min-height:100vh;background:var(--black);color:var(--text);font-family:'DM Sans',sans-serif;}
+
+/* ── background ── */
+.bg{
+  position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% -5%, rgba(29,185,84,0.2) 0%, transparent 60%),
+    linear-gradient(180deg,#0d0d0d 0%,#000 70%);
+}
+
+/* ── nav ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:10;
+  padding:1.2rem 2.5rem;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(0,0,0,0.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{display:flex;align-items:center;gap:9px;text-decoration:none;}
+.logo-icon{
+  width:32px;height:32px;background:var(--green);border-radius:50%;
+  display:grid;place-items:center;
+}
+.logo-icon svg{width:18px;height:18px;fill:#000;}
+.logo-name{font-weight:700;font-size:1.3rem;color:#fff;letter-spacing:-0.02em;}
+
+/* nav right — user pill */
+.nav-user{display:flex;align-items:center;gap:0.75rem;}
+.nav-avatar{
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,var(--green),#0a7a30);
+  display:grid;place-items:center;
+  font-weight:700;font-size:0.85rem;color:#000;
+  flex-shrink:0;
+}
+.nav-username{font-size:0.88rem;font-weight:600;color:#fff;}
+.nav-logout{
+  padding:0.5rem 1.2rem;border-radius:500px;
+  font-size:0.82rem;font-weight:700;
+  color:var(--muted);text-decoration:none;
+  border:1.5px solid rgba(255,255,255,0.18);
+  transition:color 0.2s,border-color 0.2s;
+  margin-left:0.5rem;
+}
+.nav-logout:hover{color:#fff;border-color:#fff;}
+
+/* ── page ── */
+.page{
+  position:relative;z-index:1;
+  min-height:100vh;
+  padding:6.5rem 2rem 3rem;
+  max-width:860px;
+  margin:0 auto;
+}
+
+/* ── hero greeting ── */
+.greeting{
+  margin-bottom:2.5rem;
+  animation:fadeUp 0.6s 0.1s both;
+}
+.greeting-time{
+  font-size:0.78rem;font-weight:700;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--green);margin-bottom:0.5rem;
+}
+.greeting-title{
+  font-weight:700;font-size:clamp(2rem,5vw,3rem);
+  letter-spacing:-0.02em;line-height:1.1;
+}
+.greeting-title span{color:var(--green);}
+.greeting-sub{
+  margin-top:0.5rem;font-size:0.95rem;
+  color:var(--muted);
+}
+
+/* ── stats row ── */
+.stats{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1rem;margin-bottom:2rem;
+}
+@media(max-width:560px){.stats{grid-template-columns:1fr;}}
+
+.stat-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:1.5rem 1.5rem 1.25rem;
+  transition:background 0.2s,transform 0.2s;
+  animation:fadeUp 0.6s calc(var(--i,0)*0.08s + 0.2s) both;
+}
+.stat-card:hover{background:var(--card2);transform:translateY(-3px);}
+.stat-icon{font-size:1.5rem;margin-bottom:0.75rem;}
+.stat-label{
+  font-size:0.72rem;font-weight:700;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:0.3rem;
+}
+.stat-value{
+  font-size:1.75rem;font-weight:700;
+  letter-spacing:-0.02em;color:#fff;
+}
+.stat-value.green{color:var(--green);}
+
+/* ── profile card ── */
+.profile-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:2rem;
+  margin-bottom:1.5rem;
+  animation:fadeUp 0.6s 0.45s both;
+}
+.section-title{
+  font-size:0.72rem;font-weight:700;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:1.25rem;
+}
+.profile-rows{display:flex;flex-direction:column;gap:0;}
+
+.profile-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0.85rem 0;
+  border-bottom:1px solid var(--border);
+}
+.profile-row:last-child{border-bottom:none;}
+.profile-row-left{display:flex;align-items:center;gap:12px;}
+.row-icon{
+  width:36px;height:36px;border-radius:8px;
+  background:rgba(29,185,84,0.1);
+  border:1px solid rgba(29,185,84,0.2);
+  display:grid;place-items:center;font-size:1rem;flex-shrink:0;
+}
+.row-label{font-size:0.78rem;color:var(--muted);margin-bottom:2px;}
+.row-value{font-size:0.95rem;font-weight:500;color:#fff;}
+.row-badge{
+  font-size:0.72rem;font-weight:700;
+  padding:3px 10px;border-radius:500px;
+  background:rgba(29,185,84,0.15);
+  color:var(--green);border:1px solid rgba(29,185,84,0.25);
+}
+
+/* ── action buttons ── */
+.actions{
+  display:flex;gap:0.75rem;flex-wrap:wrap;
+  animation:fadeUp 0.6s 0.55s both;
+}
+.btn{
+  padding:0.8rem 1.8rem;border-radius:500px;
+  font-family:'DM Sans',sans-serif;font-size:0.875rem;font-weight:700;
+  text-decoration:none;cursor:pointer;border:none;
+  display:inline-flex;align-items:center;gap:8px;
+  transition:transform 0.15s,box-shadow 0.2s,background 0.15s;
+}
+.btn:hover{transform:scale(1.03);}
+.btn-green{
+  background:var(--green);color:#000;
+}
+.btn-green:hover{background:var(--green-light);box-shadow:0 6px 24px rgba(29,185,84,0.4);}
+.btn-outline{
+  background:transparent;color:#fff;
+  border:1.5px solid rgba(255,255,255,0.3);
+}
+.btn-outline:hover{border-color:#fff;background:rgba(255,255,255,0.05);}
+.btn-danger{
+  background:transparent;color:#f15e6c;
+  border:1.5px solid rgba(241,94,108,0.3);
+}
+.btn-danger:hover{border-color:#f15e6c;background:rgba(241,94,108,0.07);}
+
+/* ── keyframes ── */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(20px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+@media(max-width:480px){
+  nav{padding:1rem 1.25rem;}
+  .nav-username{display:none;}
+  .page{padding:5.5rem 1rem 2rem;}
+  .profile-card{padding:1.25rem;}
+  .actions{flex-direction:column;}
+  .btn{justify-content:center;}
+}
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+
+<!-- nav -->
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.65 14.65c-.2.2-.51.27-.78.15-2.14-1.31-4.83-1.6-8-.88-.31.07-.62-.12-.69-.43-.07-.31.12-.62.43-.69 3.47-.8 6.45-.45 8.84 1.02.27.16.34.51.2.83zm1.24-2.77c-.25.25-.64.33-.97.19-2.45-1.5-6.18-1.94-9.08-1.06-.37.11-.76-.1-.87-.47s.1-.76.47-.87c3.31-.99 7.42-.51 10.23 1.24.32.2.42.62.22.97zm.11-2.88C15.12 9.46 10.42 9.3 7.75 10.09c-.44.13-.91-.12-1.04-.56-.13-.44.12-.91.56-1.04 3.07-.93 8.17-.75 11.39 1.23.4.24.52.75.28 1.15-.24.4-.76.53-1.14.29z"/></svg>
+    </div>
+    <span class="logo-name">Vibe</span>
+  </a>
+  <div class="nav-user">
+    <div class="nav-avatar">{{ username[0].upper() if username else 'U' }}</div>
+    <span class="nav-username">{{ username }}</span>
+    <a href="/" class="nav-logout">Log out</a>
+  </div>
+</nav>
+
+<!-- page -->
+<div class="page">
+
+  <!-- greeting -->
+  <div class="greeting">
+    <p class="greeting-time" id="timeGreet">Good evening</p>
+    <h1 class="greeting-title">Welcome back, <span>{{ username }}</span>!</h1>
+    <p class="greeting-sub">Here's a look at your account.</p>
+  </div>
+
+  <!-- stats -->
+  <div class="stats">
+    <div class="stat-card" style="--i:0">
+      <div class="stat-icon">🎵</div>
+      <p class="stat-label">Points</p>
+      <p class="stat-value green">{{ points }}</p>
+    </div>
+    <div class="stat-card" style="--i:1">
+      <div class="stat-icon">✉️</div>
+      <p class="stat-label">Email</p>
+      <p class="stat-value" style="font-size:1rem;margin-top:4px;">{{ email }}</p>
+    </div>
+    <div class="stat-card" style="--i:2">
+      <div class="stat-icon">⭐</div>
+      <p class="stat-label">Status</p>
+      <p class="stat-value" style="font-size:1.1rem;margin-top:4px;">Active</p>
+    </div>
+  </div>
+
+  <!-- profile detail -->
+  <div class="profile-card">
+    <p class="section-title">Account Details</p>
+    <div class="profile-rows">
+
+      <div class="profile-row">
+        <div class="profile-row-left">
+          <div class="row-icon">👤</div>
+          <div>
+            <p class="row-label">Username</p>
+            <p class="row-value">{{ username }}</p>
+          </div>
+        </div>
+        <span class="row-badge">Member</span>
+      </div>
+
+      <div class="profile-row">
+        <div class="profile-row-left">
+          <div class="row-icon">📧</div>
+          <div>
+            <p class="row-label">Email Address</p>
+            <p class="row-value">{{ email }}</p>
+          </div>
+        </div>
+        <span class="row-badge">Verified</span>
+      </div>
+
+      <div class="profile-row">
+        <div class="profile-row-left">
+          <div class="row-icon">🏆</div>
+          <div>
+            <p class="row-label">Total Points</p>
+            <p class="row-value">{{ points }} pts</p>
+          </div>
+        </div>
+        <span class="row-badge">Earned</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- actions -->
+  <div class="actions">
+    <a href="/update?email={{ email }}" class="btn btn-outline">🔑 Change Password</a>
+    <a href="/" class="btn btn-danger">↩ Log Out</a>
+  </div>
+
+</div>
+
+<script>
+// dynamic greeting based on time
+const h = new Date().getHours();
+const el = document.getElementById('timeGreet');
+if(h >= 5 && h < 12) el.textContent = 'Good morning';
+else if(h >= 12 && h < 17) el.textContent = 'Good afternoon';
+else el.textContent = 'Good evening';
+</script>
+
+</body>
+</html>
