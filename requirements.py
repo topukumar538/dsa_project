@@ -1,9 +1,0 @@
-fastapi==0.104.1
-uvicorn[standard]==0.24.0
-python-multipart==0.0.6
-jinja2==3.1.2
-sqlalchemy==2.0.23
-passlib[bcrypt]==1.7.4
-requests==2.31.0
-python-dotenv==1.0.0
-bcrypt==4.1.2
