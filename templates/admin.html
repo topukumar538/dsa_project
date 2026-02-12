@@ -1,1 +1,299 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(180deg, #121212 0%, #1a1a1a 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar h2 {
+            font-size: 24px;
+            font-weight: 900;
+            background: linear-gradient(90deg, #1db954 0%, #1ed760 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .navbar-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 16px;
+            border-radius: 500px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar-user span {
+            color: #b3b3b3;
+            font-size: 14px;
+        }
+
+        .navbar-user strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1db954 0%, #1ed760 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .container {
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 32px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            margin-bottom: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(29, 185, 84, 0.3);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .card h3 {
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 12px;
+            color: #ffffff;
+        }
+
+        .card p {
+            color: #b3b3b3;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .welcome-emoji {
+            display: inline-block;
+            animation: wave 2s ease-in-out infinite;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            10%, 30% { transform: rotate(14deg); }
+            20%, 40% { transform: rotate(-8deg); }
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            padding: 20px 24px;
+            text-align: center;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1db954 0%, #1ed760 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn:hover::before {
+            opacity: 1;
+        }
+
+        .btn:hover {
+            border-color: #1db954;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(29, 185, 84, 0.4);
+        }
+
+        .btn-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .btn-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 900;
+            color: #1db954;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #b3b3b3;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <h2>Admin Dashboard</h2>
+        <div class="navbar-user">
+            <div class="user-avatar">A</div>
+            <div>
+                <span>Logged in as:</span>
+                <strong>{{ email }}</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <div class="card">
+            <h3>Welcome, Admin <span class="welcome-emoji">👋</span></h3>
+            <p>This is your control panel. You can manage the system from here.</p>
+        </div>
+
+        <div class="card">
+            <h3>Quick Actions</h3>
+
+            <div class="button-group">
+
+                <a href="/adminuser" class="btn">
+                    <div class="btn-icon">👥</div>
+                    <div class="btn-content">Manage Users</div>
+                </a>
+
+                <a href="/add-product" class="btn">
+                    <div class="btn-badge">NEW</div>
+                    <div class="btn-icon">📦</div>
+                    <div class="btn-content">Add Product</div>
+                </a>
+
+                <a href="/view-reports" class="btn">
+                    <div class="btn-badge">NEW</div>
+                    <div class="btn-icon">📊</div>
+                    <div class="btn-content">View Reports</div>
+                </a>
+
+                <a href="/settings" class="btn">
+                    <div class="btn-badge">NEW</div>
+                    <div class="btn-icon">⚙️</div>
+                    <div class="btn-content">Settings</div>
+                </a>
+
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
+
